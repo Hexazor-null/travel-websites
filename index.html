@@ -30,25 +30,71 @@
     color: var(--cream);
     overflow-x: hidden;
   }
-  /* CURSOR */
-  * { cursor: none !important; }
-  #cursor {
-    position: fixed; width: 10px; height: 10px;
-    background: var(--gold); border-radius: 50%;
-    pointer-events: none; z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s ease;
-  }
+
+  /* ─── CURSOR ─────────────────────────────────────────────
+     Hanya tampil di perangkat pointer halus (mouse/trackpad).
+     Pada layar sentuh / stylus kasar → display:none otomatis.
+  ──────────────────────────────────────────────────────── */
+  #cursor,
   #cursor-ring {
-    position: fixed; width: 38px; height: 38px;
-    border: 1px solid rgba(201,168,76,0.5); border-radius: 50%;
-    pointer-events: none; z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: none; /* sembunyikan by default */
   }
-  body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring {
-    transform: translate(-50%, -50%) scale(1.8);
-    border-color: var(--gold);
+
+  @media (pointer: fine) {
+    /* sembunyikan kursor hanya di level body & html, bukan semua elemen */
+    html, body { cursor: none !important; }
+    a, button, [role="button"], input, label, select, textarea { cursor: none !important; }
+
+    #cursor {
+      display: block;
+      position: fixed;
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      /* langsung ikuti mouse, tanpa delay */
+      transition: opacity 0.2s ease, transform 0.15s ease;
+      opacity: 1;
+      will-change: left, top;
+    }
+
+    #cursor-ring {
+      display: block;
+      position: fixed;
+      width: 32px; height: 32px;
+      border: 1px solid rgba(201,168,76,0.45);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      /* ring mengikuti dengan sedikit lag untuk efek ringan */
+      transition: width 0.25s ease,
+                  height 0.25s ease,
+                  border-color 0.25s ease,
+                  opacity 0.2s ease,
+                  background 0.25s ease;
+      opacity: 1;
+      will-change: left, top;
+    }
+
+    /* State: hover di atas elemen interaktif */
+    body.cursor-hover #cursor {
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+    }
+    body.cursor-hover #cursor-ring {
+      width: 44px; height: 44px;
+      border-color: var(--gold);
+      background: rgba(201,168,76,0.08);
+    }
+
+    /* State: kursor keluar window */
+    body.cursor-out #cursor,
+    body.cursor-out #cursor-ring {
+      opacity: 0;
+    }
   }
 
   /* NAV */
@@ -109,7 +155,6 @@
     position: absolute; inset: 0;
     background: linear-gradient(to right, var(--dark) 0%, transparent 40%, transparent 70%, rgba(12,11,9,0.6) 100%);
   }
-  /* Animated gold lines */
   .hero-lines {
     position: absolute; top: 0; right: 0; width: 45%; height: 100%;
     overflow: hidden; pointer-events: none;
@@ -549,7 +594,7 @@
     max-width: 520px; margin: 0 auto 48px;
     line-height: 1.8; font-weight: 300;
   }
-  .cta-actions { display: flex; align-items: center; gap: 24px; justify-content: center; }
+  .cta-actions { display: flex; align-items: center; gap: 24px; justify-content: center; flex-wrap: wrap; }
   .cta-phone {
     display: flex; align-items: center; gap: 12px;
     font-size: 13px; color: var(--stone-light);
@@ -568,7 +613,7 @@
   }
   .footer-top {
     display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 60px; margin-bottom: 60px;
+    gap: 60px; margin-bottom: 60px; overflow: hidden;
   }
   .footer-brand { }
   .footer-logo {
@@ -605,6 +650,7 @@
   .footer-col ul li a {
     font-size: 12.5px; color: var(--stone-light); text-decoration: none;
     font-weight: 300; transition: color 0.3s; letter-spacing: 0.02em;
+    word-break: break-word; overflow-wrap: break-word; display: block;
   }
   .footer-col ul li a:hover { color: var(--gold-light); }
   .footer-bottom {
@@ -713,12 +759,10 @@
 
   /* MOBILE (<=600px) */
   @media (max-width: 600px) {
-    * { cursor: auto !important; }
-    #cursor, #cursor-ring { display: none; }
-
+    html, body { max-width: 100%; overflow-x: hidden; }
     nav { padding: 20px 20px; }
     nav.scrolled { padding: 14px 20px; }
-    section { padding: 64px 20px; }
+    section { padding: 64px 20px; max-width: 100%; }
 
     #hero { align-items: flex-end; }
     .hero-content { padding: 0 20px 200px; max-width: 100%; }
@@ -726,7 +770,7 @@
     .hero-sub { font-size: 16px; margin-bottom: 24px; }
     .hero-desc { font-size: 12.5px; margin-bottom: 32px; }
     .hero-actions { flex-direction: column; align-items: flex-start; gap: 16px; }
-    .btn-primary { width: 100%; text-align: center; padding: 16px 20px; }
+    .btn-primary { width: 100%; text-align: center; padding: 16px 20px; box-sizing: border-box; }
     .hero-stats {
       position: absolute; left: 20px; right: 20px; bottom: 100px;
       display: grid; grid-template-columns: repeat(3,1fr);
@@ -784,10 +828,13 @@
 
     #cta { padding: 72px 20px; }
     #cta::before { display: none; }
-    .cta-actions { flex-direction: column; align-items: center; gap: 18px; }
+    .cta-actions { flex-direction: column; align-items: center; gap: 18px; width: 100%; }
+    .cta-phone { justify-content: center; }
+    .btn-primary { min-width: unset; }
 
     footer { padding: 48px 20px 28px; }
-    .footer-top { grid-template-columns: 1fr; gap: 32px; }
+    .footer-top { grid-template-columns: 1fr; gap: 32px; overflow: hidden; }
+    .footer-col ul li a { word-break: break-all; }
     .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
     .footer-legal { justify-content: center; flex-wrap: wrap; gap: 16px; }
     .footer-tagline br { display: none; }
@@ -803,6 +850,7 @@
 </head>
 <body>
 
+<!-- Kursor hanya dirender jika bukan perangkat sentuh -->
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
 
@@ -934,7 +982,6 @@
     </div>
   </div>
   <div class="props-grid">
-    <!-- Featured -->
     <div class="prop-card reveal">
       <div class="prop-img-wrap">
         <img class="prop-img" src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&q=80" alt="The Residences">
@@ -952,7 +999,6 @@
         </div>
       </div>
     </div>
-    <!-- Card 2 -->
     <div class="prop-card reveal">
       <div class="prop-img-wrap">
         <img class="prop-img" src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=600&q=80" alt="Grand Villa">
@@ -969,7 +1015,6 @@
         </div>
       </div>
     </div>
-    <!-- Card 3 -->
     <div class="prop-card reveal">
       <div class="prop-img-wrap">
         <img class="prop-img" src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80" alt="Office Tower">
@@ -986,7 +1031,6 @@
         </div>
       </div>
     </div>
-    <!-- Card 4 -->
     <div class="prop-card reveal">
       <div class="prop-img-wrap">
         <img class="prop-img" src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&q=80" alt="Townhouse">
@@ -1182,60 +1226,95 @@
 </footer>
 
 <script>
-// Custom cursor
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursor-ring');
-document.addEventListener('mousemove', e => {
-  cursor.style.left = e.clientX + 'px';
-  cursor.style.top = e.clientY + 'px';
-  setTimeout(() => {
-    ring.style.left = e.clientX + 'px';
-    ring.style.top = e.clientY + 'px';
-  }, 80);
-});
+  /* ── Deteksi pointer halus (mouse) ──────────────────────
+     Jika perangkat tidak punya pointer presisi (HP, tablet),
+     seluruh kursor custom dinonaktifkan via CSS media query.
+     Script ini hanya berjalan jika (pointer: fine) cocok.
+  ─────────────────────────────────────────────────────── */
+  const isFinePointer = window.matchMedia('(pointer: fine)').matches;
 
-// Hamburger menu
-const hamburger = document.getElementById('hamburger');
-const mobileMenu = document.getElementById('mobileMenu');
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('open');
-  mobileMenu.classList.toggle('open');
-  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
-});
-document.querySelectorAll('.menu-link').forEach(link => {
-  link.addEventListener('click', () => {
-    hamburger.classList.remove('open');
-    mobileMenu.classList.remove('open');
-    document.body.style.overflow = '';
-  });
-});
+  if (isFinePointer) {
+    const cursor    = document.getElementById('cursor');
+    const ring      = document.getElementById('cursor-ring');
+    const body      = document.body;
 
-// Navbar scroll
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 60) navbar.classList.add('scrolled');
-  else navbar.classList.remove('scrolled');
-});
+    /* Posisi mouse & ring dipisah agar ring terasa "mengambang" */
+    let mx = -100, my = -100; // posisi mouse aktual
+    let rx = -100, ry = -100; // posisi ring (diinterpolasi)
+    let rafId;
 
-// Scroll reveal
-const reveals = document.querySelectorAll('.reveal');
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry, i) => {
-    if (entry.isIntersecting) {
-      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+    /* Update posisi kursor titik langsung (no lag) */
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX;
+      my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top  = my + 'px';
+    });
+
+    /* Ring mengikuti dengan interpolasi halus (lerp) */
+    function lerpRing() {
+      const ease = 0.12; // makin kecil = makin lambat/ringan
+      rx += (mx - rx) * ease;
+      ry += (my - ry) * ease;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      rafId = requestAnimationFrame(lerpRing);
     }
-  });
-}, { threshold: 0.1 });
-reveals.forEach(el => revealObserver.observe(el));
+    lerpRing();
 
-// Filter tabs
-const tabs = document.querySelectorAll('.filter-tab');
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    tabs.forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
+    /* Hover pada elemen interaktif → ring membesar, titik menghilang */
+    const interactiveSelectors = 'a, button, [role="button"], input, label, .filter-tab, .prop-card, .pillar, .testi-card, .social-btn';
+
+    document.querySelectorAll(interactiveSelectors).forEach(el => {
+      el.addEventListener('mouseenter', () => body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => body.classList.remove('cursor-hover'));
+    });
+
+    /* Sembunyikan saat kursor keluar window */
+    document.addEventListener('mouseleave', () => body.classList.add('cursor-out'));
+    document.addEventListener('mouseenter', () => body.classList.remove('cursor-out'));
+  }
+
+  /* ── Hamburger menu ──────────────────────────────────── */
+  const hamburger  = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
   });
-});
+  document.querySelectorAll('.menu-link').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  /* ── Navbar scroll ───────────────────────────────────── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  /* ── Scroll reveal ───────────────────────────────────── */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  /* ── Filter tabs ─────────────────────────────────────── */
+  const tabs = document.querySelectorAll('.filter-tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
 </script>
 </body>
 </html>
