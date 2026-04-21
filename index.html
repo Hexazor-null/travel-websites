@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WANDARA — Luxury Travel Experiences</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --sand:#F5EDD9;
+  --sand-2:#EDE0C4;
+  --sand-3:#E2D0A8;
+  --clay:#C4895A;
+  --clay-d:#9E6438;
+  --clay-l:#DBA97C;
+  --terra:#7A3B1E;
+  --forest:#2D4A3E;
+  --forest-l:#3D6455;
+  --forest-pale:#D4E5DE;
+  --sky:#B8D4E8;
+  --sky-deep:#4A7FA5;
+  --ink:#1C1410;
+  --ink-2:#2E231B;
+  --mist:#F9F5EE;
+  --white:#FDFAF5;
+}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--mist);
+  color:var(--ink);
+  overflow-x:hidden;
+}
+
+/* CURSOR */
+*{cursor:none!important;}
+#cur{
+  position:fixed;width:8px;height:8px;
+  background:var(--clay);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  mix-blend-mode:multiply;
+}
+#cur-r{
+  position:fixed;width:36px;height:36px;
+  border:1.5px solid rgba(196,137,90,0.5);border-radius:50%;
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:all 0.25s ease;mix-blend-mode:multiply;
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:28px 64px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:all 0.5s ease;
+}
+nav.solid{
+  background:rgba(249,245,238,0.96);
+  backdrop-filter:blur(16px);
+  padding:18px 64px;
+  border-bottom:1px solid rgba(196,137,90,0.18);
+}
+.nav-logo{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:500;
+  letter-spacing:0.12em;color:var(--white);
+  text-decoration:none;transition:color 0.4s;
+}
+nav.solid .nav-logo{color:var(--ink);}
+.nav-logo sup{
+  font-size:9px;letter-spacing:0.2em;
+  vertical-align:super;font-family:'DM Sans',sans-serif;
+  font-weight:300;opacity:0.7;
+}
+.nav-links{
+  display:flex;align-items:center;gap:36px;list-style:none;
+}
+.nav-links a{
+  font-size:11.5px;letter-spacing:0.12em;font-weight:300;
+  color:rgba(255,255,255,0.8);text-decoration:none;
+  transition:color 0.3s;text-transform:uppercase;
+}
+nav.solid .nav-links a{color:var(--ink-2);}
+.nav-links a:hover{color:var(--clay)!important;}
+.nav-book{
+  font-size:11px;letter-spacing:0.14em;text-transform:uppercase;
+  background:var(--clay);color:var(--white);
+  padding:11px 26px;text-decoration:none;
+  font-weight:400;border-radius:2px;
+  transition:all 0.3s ease;
+}
+.nav-book:hover{background:var(--clay-d);transform:translateY(-1px);}
+
+/* HERO */
+#hero{
+  height:100vh;position:relative;
+  overflow:hidden;display:flex;align-items:flex-end;
+}
+.hero-slides{position:absolute;inset:0;}
+.hero-slide{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  opacity:0;transition:opacity 1.5s ease;
+}
+.hero-slide.active{opacity:1;}
+.hero-slide:nth-child(1){background-image:url('https://images.unsplash.com/photo-1537953773345-d172ccf13cf4?w=1800&q=85');}
+.hero-slide:nth-child(2){background-image:url('https://images.unsplash.com/photo-1571406252241-db0280bd38db?w=1800&q=85');}
+.hero-slide:nth-child(3){background-image:url('https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=1800&q=85');}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(
+    to top,
+    rgba(28,20,16,0.92) 0%,
+    rgba(28,20,16,0.45) 45%,
+    rgba(28,20,16,0.15) 100%
+  );
+}
+/* Diagonal texture overlay */
+.hero-texture{
+  position:absolute;inset:0;
+  background-image:repeating-linear-gradient(
+    -45deg,
+    transparent,transparent 40px,
+    rgba(196,137,90,0.03) 40px,rgba(196,137,90,0.03) 41px
+  );
+  pointer-events:none;
+}
+
+.hero-content{
+  position:relative;z-index:2;
+  width:100%;padding:0 64px 80px;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:14px;
+  font-size:10.5px;letter-spacing:0.35em;text-transform:uppercase;
+  color:var(--clay-l);margin-bottom:20px;font-weight:300;
+  animation:fadeUp 1s 0.2s ease both;
+}
+.hero-eyebrow-line{
+  display:block;width:48px;height:1px;background:var(--clay-l);
+}
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(58px,8vw,110px);
+  font-weight:400;line-height:0.92;
+  color:var(--white);
+  animation:fadeUp 1s 0.35s ease both;
+  letter-spacing:-0.01em;
+}
+.hero-title em{
+  font-style:italic;
+  color:var(--clay-l);display:block;
+}
+.hero-bottom{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-top:40px;animation:fadeUp 1s 0.5s ease both;
+}
+.hero-desc{
+  font-size:14px;line-height:1.85;
+  color:rgba(245,237,217,0.72);
+  max-width:420px;font-weight:300;
+  letter-spacing:0.02em;
+}
+.hero-search{
+  background:rgba(249,245,238,0.12);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(196,137,90,0.3);
+  padding:6px 6px 6px 24px;
+  display:flex;align-items:center;gap:0;
+  width:440px;
+}
+.hero-search input{
+  background:transparent;border:none;outline:none;
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;color:var(--white);
+  flex:1;font-weight:300;letter-spacing:0.04em;
+}
+.hero-search input::placeholder{color:rgba(245,237,217,0.5);}
+.hero-search button{
+  background:var(--clay);color:var(--white);
+  border:none;padding:12px 22px;
+  font-family:'DM Sans',sans-serif;
+  font-size:11px;letter-spacing:0.15em;text-transform:uppercase;
+  font-weight:400;transition:background 0.3s;
+}
+.hero-search button:hover{background:var(--clay-d);}
+.hero-counter{
+  position:absolute;right:64px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:8px;z-index:2;
+  animation:fadeUp 1s 0.6s ease both;
+}
+.hero-dot{
+  width:3px;height:28px;background:rgba(255,255,255,0.2);
+  border-radius:2px;transition:all 0.5s ease;
+}
+.hero-dot.active{background:var(--clay-l);height:44px;}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(28px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* MARQUEE */
+.marquee-strip{
+  background:var(--clay);
+  padding:14px 0;overflow:hidden;
+}
+.marquee-inner{
+  display:flex;gap:0;
+  animation:marqueeScroll 28s linear infinite;
+  white-space:nowrap;
+}
+@keyframes marqueeScroll{
+  from{transform:translateX(0);}
+  to{transform:translateX(-50%);}
+}
+.marquee-item{
+  font-size:11px;letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--white);font-weight:300;
+  padding:0 32px;display:inline-flex;align-items:center;gap:32px;
+}
+.marquee-item::after{
+  content:'◆';font-size:7px;opacity:0.6;
+}
+
+/* FEATURED */
+#featured{padding:100px 64px;}
+.feat-header{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-bottom:64px;
+}
+.section-tag{
+  display:inline-flex;align-items:center;gap:12px;
+  font-size:10px;letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--clay);margin-bottom:16px;font-weight:400;
+}
+.section-tag::before{
+  content:'';display:block;
+  width:28px;height:1.5px;background:var(--clay);
+}
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(32px,3.5vw,50px);
+  font-weight:400;line-height:1.1;
+  color:var(--ink);
+}
+.section-title em{font-style:italic;color:var(--clay);}
+.view-all{
+  font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--clay);text-decoration:none;font-weight:400;
+  display:inline-flex;align-items:center;gap:8px;
+  border-bottom:1px solid var(--clay-l);padding-bottom:4px;
+  transition:all 0.3s;
+}
+.view-all:hover{color:var(--clay-d);gap:14px;}
+.view-all::after{content:'→';transition:transform 0.3s;}
+
+/* DESTINATION GRID */
+.dest-grid{
+  display:grid;
+  grid-template-columns:1.6fr 1fr 1fr;
+  grid-template-rows:auto auto;
+  gap:20px;
+}
+.dest-card{
+  position:relative;overflow:hidden;
+  border-radius:4px;
+  transition:transform 0.4s ease;
+}
+.dest-card:hover{transform:translateY(-6px);}
+.dest-card:hover .dest-img{transform:scale(1.06);}
+.dest-card:first-child{grid-row:span 2;}
+.dest-card:first-child .dest-inner{height:100%;min-height:580px;}
+.dest-inner{
+  height:280px;position:relative;overflow:hidden;
+}
+.dest-img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+  filter:brightness(0.88)saturate(1.1);
+}
+.dest-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(28,20,16,0.85) 0%,rgba(28,20,16,0.1) 55%,transparent 100%);
+}
+.dest-tag{
+  position:absolute;top:18px;left:18px;
+  background:var(--clay);color:var(--white);
+  font-size:9px;letter-spacing:0.22em;text-transform:uppercase;
+  padding:5px 13px;font-weight:400;border-radius:2px;
+}
+.dest-heart{
+  position:absolute;top:16px;right:16px;
+  width:34px;height:34px;
+  background:rgba(249,245,238,0.15);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,0.8);font-size:13px;
+  transition:all 0.3s;
+}
+.dest-heart:hover{background:rgba(196,137,90,0.8);border-color:transparent;}
+.dest-info{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:24px 24px 22px;
+}
+.dest-country{
+  font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--clay-l);margin-bottom:6px;font-weight:300;
+}
+.dest-name{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:400;color:var(--white);
+  margin-bottom:10px;line-height:1.2;
+}
+.dest-card:first-child .dest-name{font-size:34px;}
+.dest-meta{
+  display:flex;align-items:center;justify-content:space-between;
+}
+.dest-duration{
+  font-size:11px;color:rgba(245,237,217,0.65);font-weight:300;
+}
+.dest-price{
+  font-family:'Playfair Display',serif;
+  font-size:18px;font-weight:400;color:var(--clay-l);
+}
+.dest-price span{
+  font-size:10px;letter-spacing:0.08em;
+  font-family:'DM Sans',sans-serif;font-weight:300;
+  opacity:0.75;
+}
+
+/* CATEGORIES */
+#categories{
+  background:var(--forest);
+  padding:100px 64px;
+}
+.cat-header{text-align:center;margin-bottom:64px;}
+.cat-header .section-tag{justify-content:center;color:var(--clay-l);}
+.cat-header .section-tag::before{background:var(--clay-l);}
+.cat-header .section-title{color:var(--white);}
+.cat-grid{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:16px;
+}
+.cat-card{
+  position:relative;overflow:hidden;
+  border-radius:4px;padding:0;
+  background:var(--forest-l);
+  transition:transform 0.35s ease;
+  text-decoration:none;
+  display:block;
+}
+.cat-card:hover{transform:translateY(-8px);}
+.cat-card:hover .cat-img{transform:scale(1.1);}
+.cat-img-wrap{height:220px;overflow:hidden;position:relative;}
+.cat-img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform 0.6s ease;
+  filter:brightness(0.7)saturate(1.2);
+}
+.cat-img-fade{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(45,74,62,0.95) 0%,transparent 60%);
+}
+.cat-body{padding:20px 20px 24px;}
+.cat-icon{
+  font-size:22px;margin-bottom:12px;
+  display:block;
+}
+.cat-name{
+  font-family:'Playfair Display',serif;
+  font-size:17px;font-weight:400;color:var(--white);
+  margin-bottom:6px;
+}
+.cat-count{
+  font-size:11px;color:rgba(212,229,222,0.6);font-weight:300;
+  letter-spacing:0.05em;
+}
+
+/* EXPERIENCES */
+#experiences{padding:100px 64px;background:var(--sand);}
+.exp-layout{
+  display:grid;grid-template-columns:1fr 1.3fr;
+  gap:80px;align-items:center;
+}
+.exp-text{}
+.exp-text .section-title{margin-bottom:28px;}
+.exp-text p{
+  font-size:14px;line-height:1.9;color:rgba(28,20,16,0.65);
+  font-weight:300;margin-bottom:20px;
+}
+.exp-numbers{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:20px;margin-top:40px;
+}
+.exp-num{
+  padding:22px;background:var(--white);
+  border-radius:4px;
+  border-left:3px solid var(--clay);
+}
+.exp-num-val{
+  font-family:'Playfair Display',serif;
+  font-size:38px;font-weight:400;color:var(--clay-d);
+  line-height:1;margin-bottom:6px;
+}
+.exp-num-label{
+  font-size:11px;color:rgba(28,20,16,0.5);
+  font-weight:300;letter-spacing:0.08em;
+}
+.exp-visual{
+  position:relative;
+}
+.exp-img-main{
+  width:100%;height:480px;object-fit:cover;
+  border-radius:4px;
+  filter:brightness(0.92)saturate(1.1);
+}
+.exp-card-float{
+  position:absolute;bottom:-28px;left:-40px;
+  background:var(--white);
+  border-radius:4px;padding:22px 26px;
+  box-shadow:0 20px 60px rgba(28,20,16,0.12);
+  width:220px;
+}
+.exp-card-float-title{
+  font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--clay);margin-bottom:12px;font-weight:400;
+}
+.exp-rating{
+  display:flex;align-items:center;gap:6px;
+  margin-bottom:8px;
+}
+.exp-stars{color:var(--clay);font-size:12px;letter-spacing:2px;}
+.exp-rating-num{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:400;color:var(--ink);
+}
+.exp-rating-sub{
+  font-size:11px;color:rgba(28,20,16,0.45);font-weight:300;
+}
+.exp-img-accent{
+  position:absolute;top:-28px;right:-28px;
+  width:140px;height:170px;object-fit:cover;
+  border-radius:4px;border:5px solid var(--sand);
+  filter:brightness(0.92)saturate(1.1);
+}
+
+/* PACKAGES */
+#packages{padding:100px 64px;}
+.pkg-header{margin-bottom:56px;}
+.pkg-tabs{
+  display:flex;gap:0;
+  border-bottom:1.5px solid rgba(196,137,90,0.2);
+  margin-bottom:48px;
+}
+.pkg-tab{
+  font-size:12px;letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(28,20,16,0.45);background:transparent;border:none;
+  padding:12px 24px 14px;font-family:'DM Sans',sans-serif;
+  font-weight:300;transition:all 0.3s;
+  position:relative;
+}
+.pkg-tab.active,.pkg-tab:hover{color:var(--clay);}
+.pkg-tab.active::after{
+  content:'';position:absolute;
+  bottom:-1.5px;left:0;right:0;height:2px;
+  background:var(--clay);
+}
+.pkg-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+.pkg-card{
+  background:var(--white);
+  border-radius:6px;overflow:hidden;
+  border:1px solid rgba(196,137,90,0.1);
+  transition:all 0.4s ease;
+}
+.pkg-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 30px 80px rgba(28,20,16,0.1);
+  border-color:rgba(196,137,90,0.3);
+}
+.pkg-card.featured{
+  border:2px solid var(--clay);
+  position:relative;
+}
+.pkg-card.featured::before{
+  content:'TERPOPULER';
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  background:var(--clay);color:var(--white);
+  font-size:8.5px;letter-spacing:0.25em;padding:5px 16px;
+  font-weight:400;
+}
+.pkg-img-wrap{height:200px;overflow:hidden;position:relative;}
+.pkg-img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform 0.6s ease;
+  filter:brightness(0.9)saturate(1.1);
+}
+.pkg-card:hover .pkg-img{transform:scale(1.06);}
+.pkg-duration{
+  position:absolute;bottom:14px;right:14px;
+  background:rgba(28,20,16,0.75);backdrop-filter:blur(8px);
+  color:var(--white);font-size:10px;
+  letter-spacing:0.12em;padding:5px 12px;
+  border-radius:2px;font-weight:300;
+}
+.pkg-body{padding:26px;}
+.pkg-dest{
+  font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--clay);margin-bottom:8px;font-weight:400;
+}
+.pkg-name{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:400;color:var(--ink);
+  margin-bottom:12px;line-height:1.3;
+}
+.pkg-desc{
+  font-size:12.5px;line-height:1.75;color:rgba(28,20,16,0.55);
+  font-weight:300;margin-bottom:20px;
+}
+.pkg-includes{
+  display:flex;gap:10px;flex-wrap:wrap;
+  margin-bottom:20px;
+}
+.pkg-include-tag{
+  font-size:10px;letter-spacing:0.08em;
+  color:var(--forest);
+  background:var(--forest-pale);
+  padding:4px 10px;border-radius:2px;font-weight:400;
+}
+.pkg-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:18px;border-top:1px solid rgba(196,137,90,0.12);
+}
+.pkg-price{
+  font-family:'Playfair Display',serif;
+  font-size:24px;font-weight:400;color:var(--clay-d);
+}
+.pkg-price span{
+  font-size:10px;font-family:'DM Sans',sans-serif;
+  color:rgba(28,20,16,0.45);font-weight:300;
+}
+.pkg-btn{
+  font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--white);background:var(--clay);
+  padding:10px 20px;text-decoration:none;font-weight:400;
+  border-radius:2px;transition:background 0.3s;
+}
+.pkg-btn:hover{background:var(--clay-d);}
+
+/* TESTIMONIALS */
+#reviews{
+  background:var(--ink);
+  padding:100px 64px;
+}
+.rev-header{
+  display:grid;grid-template-columns:1fr 2fr;
+  gap:80px;align-items:start;
+  margin-bottom:64px;
+}
+.rev-header .section-tag{color:var(--clay-l);}
+.rev-header .section-tag::before{background:var(--clay-l);}
+.rev-header .section-title{color:var(--white);}
+.rev-header p{
+  font-size:13.5px;line-height:1.85;
+  color:rgba(245,237,217,0.5);font-weight:300;
+  margin-top:16px;
+}
+.rev-score{
+  display:flex;align-items:center;gap:20px;
+  margin-top:32px;
+}
+.rev-score-num{
+  font-family:'Playfair Display',serif;
+  font-size:64px;font-weight:400;color:var(--clay-l);
+  line-height:1;
+}
+.rev-score-detail{}
+.rev-stars{color:var(--clay);letter-spacing:3px;font-size:14px;}
+.rev-score-sub{
+  font-size:11px;color:rgba(245,237,217,0.4);
+  margin-top:4px;font-weight:300;
+}
+.rev-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+.rev-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(196,137,90,0.1);
+  padding:32px;border-radius:4px;
+  transition:border-color 0.3s,transform 0.3s;
+}
+.rev-card:hover{
+  border-color:rgba(196,137,90,0.3);
+  transform:translateY(-4px);
+}
+.rev-quote{
+  font-size:32px;color:var(--clay);
+  font-family:'Playfair Display',serif;
+  line-height:0.6;margin-bottom:16px;
+  opacity:0.6;
+}
+.rev-text{
+  font-family:'Playfair Display',serif;
+  font-size:15.5px;font-weight:400;font-style:italic;
+  color:rgba(245,237,217,0.8);
+  line-height:1.65;margin-bottom:24px;
+}
+.rev-author{
+  display:flex;align-items:center;gap:14px;
+  padding-top:20px;
+  border-top:1px solid rgba(196,137,90,0.1);
+}
+.rev-avatar{
+  width:42px;height:42px;border-radius:50%;object-fit:cover;
+  border:2px solid rgba(196,137,90,0.3);
+  filter:sepia(0.1)brightness(0.95);
+}
+.rev-name{font-size:13px;color:var(--sand-2);font-weight:400;}
+.rev-trip{
+  font-size:11px;color:rgba(245,237,217,0.35);
+  margin-top:2px;font-weight:300;
+}
+
+/* WHY */
+#why{
+  background:var(--sand-2);
+  padding:100px 64px;
+}
+.why-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:28px;margin-top:60px;
+}
+.why-card{
+  padding:36px 28px;
+  background:var(--white);border-radius:4px;
+  border-bottom:3px solid transparent;
+  transition:all 0.35s ease;
+}
+.why-card:hover{
+  transform:translateY(-6px);
+  border-bottom-color:var(--clay);
+  box-shadow:0 20px 50px rgba(28,20,16,0.08);
+}
+.why-icon{
+  font-size:32px;margin-bottom:20px;display:block;
+}
+.why-title{
+  font-family:'Playfair Display',serif;
+  font-size:18px;font-weight:400;color:var(--ink);
+  margin-bottom:12px;
+}
+.why-desc{
+  font-size:12.5px;line-height:1.8;
+  color:rgba(28,20,16,0.55);font-weight:300;
+}
+
+/* NEWSLETTER */
+#newsletter{
+  background:var(--forest);
+  padding:100px 64px;
+  position:relative;overflow:hidden;
+}
+#newsletter::before{
+  content:'';position:absolute;
+  top:-100px;right:-100px;
+  width:500px;height:500px;
+  border-radius:50%;
+  background:rgba(196,137,90,0.06);
+  pointer-events:none;
+}
+#newsletter::after{
+  content:'';position:absolute;
+  bottom:-120px;left:-80px;
+  width:400px;height:400px;
+  border-radius:50%;
+  background:rgba(196,137,90,0.04);
+  pointer-events:none;
+}
+.nl-inner{
+  max-width:640px;margin:0 auto;
+  text-align:center;position:relative;z-index:1;
+}
+.nl-inner .section-tag{
+  justify-content:center;
+  color:var(--clay-l);
+}
+.nl-inner .section-tag::before{background:var(--clay-l);}
+.nl-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(36px,4vw,54px);
+  font-weight:400;color:var(--white);
+  line-height:1.1;margin-bottom:20px;
+}
+.nl-title em{font-style:italic;color:var(--clay-l);}
+.nl-sub{
+  font-size:13.5px;color:rgba(212,229,222,0.6);
+  line-height:1.8;font-weight:300;margin-bottom:40px;
+}
+.nl-form{
+  display:flex;gap:0;
+  border:1px solid rgba(196,137,90,0.3);
+  overflow:hidden;border-radius:2px;
+}
+.nl-form input{
+  flex:1;background:rgba(255,255,255,0.05);
+  border:none;outline:none;padding:16px 22px;
+  font-family:'DM Sans',sans-serif;
+  color:var(--white);font-size:13px;font-weight:300;
+}
+.nl-form input::placeholder{color:rgba(212,229,222,0.4);}
+.nl-form button{
+  background:var(--clay);color:var(--white);
+  border:none;padding:16px 28px;
+  font-family:'DM Sans',sans-serif;
+  font-size:11px;letter-spacing:0.15em;
+  text-transform:uppercase;font-weight:400;
+  transition:background 0.3s;white-space:nowrap;
+}
+.nl-form button:hover{background:var(--clay-d);}
+
+/* FOOTER */
+footer{
+  background:var(--ink-2);
+  padding:72px 64px 36px;
+  border-top:1px solid rgba(196,137,90,0.12);
+}
+.footer-top{
+  display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;
+  gap:60px;margin-bottom:60px;
+}
+.footer-logo{
+  font-family:'Playfair Display',serif;
+  font-size:22px;font-weight:500;
+  letter-spacing:0.12em;color:var(--white);
+  display:block;margin-bottom:20px;
+}
+.footer-tagline{
+  font-size:12.5px;line-height:1.85;
+  color:rgba(245,237,217,0.4);
+  font-weight:300;margin-bottom:28px;
+}
+.footer-social{display:flex;gap:10px;}
+.soc{
+  width:36px;height:36px;
+  border:1px solid rgba(196,137,90,0.2);
+  border-radius:50%;display:flex;align-items:center;
+  justify-content:center;color:rgba(245,237,217,0.5);
+  font-size:10.5px;text-decoration:none;
+  transition:all 0.3s;font-weight:400;
+}
+.soc:hover{
+  border-color:var(--clay);
+  color:var(--clay);
+  background:rgba(196,137,90,0.08);
+}
+.footer-col h4{
+  font-size:10px;letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--clay-l);margin-bottom:22px;font-weight:400;
+}
+.footer-col ul{list-style:none;}
+.footer-col ul li{margin-bottom:10px;}
+.footer-col ul li a{
+  font-size:12.5px;color:rgba(245,237,217,0.45);
+  text-decoration:none;font-weight:300;
+  transition:color 0.3s;letter-spacing:0.02em;
+}
+.footer-col ul li a:hover{color:var(--clay-l);}
+.footer-bottom{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:28px;
+  border-top:1px solid rgba(196,137,90,0.1);
+}
+.footer-copy{
+  font-size:11px;color:rgba(245,237,217,0.3);font-weight:300;
+}
+.footer-legal{display:flex;gap:20px;}
+.footer-legal a{
+  font-size:11px;color:rgba(245,237,217,0.3);
+  text-decoration:none;font-weight:300;transition:color 0.3s;
+}
+.footer-legal a:hover{color:var(--clay-l);}
+
+/* REVEAL */
+.reveal{
+  opacity:0;transform:translateY(24px);
+  transition:all 0.75s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-l{
+  opacity:0;transform:translateX(-24px);
+  transition:all 0.75s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.reveal-l.visible{opacity:1;transform:translateX(0);}
+.reveal-r{
+  opacity:0;transform:translateX(24px);
+  transition:all 0.75s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.reveal-r.visible{opacity:1;transform:translateX(0);}
+
+@media(max-width:1024px){
+  nav{padding:22px 28px;}
+  nav.solid{padding:14px 28px;}
+  .nav-links{display:none;}
+  section,#featured,#categories,#experiences,#packages,#reviews,#why,#newsletter{padding:72px 28px;}
+  #hero .hero-content{padding:0 28px 72px;}
+  .hero-counter{right:28px;}
+  .dest-grid{grid-template-columns:1fr;}
+  .dest-card:first-child{grid-row:auto;}
+  .dest-card:first-child .dest-inner,.dest-inner{height:260px;}
+  .cat-grid{grid-template-columns:repeat(2,1fr);}
+  .exp-layout,.rev-header{grid-template-columns:1fr;gap:48px;}
+  .exp-card-float{left:0;bottom:-20px;}
+  .exp-img-accent{display:none;}
+  .pkg-grid{grid-template-columns:1fr;}
+  .rev-grid{grid-template-columns:1fr;}
+  .why-grid{grid-template-columns:1fr 1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">WANDARA<sup>™</sup></a>
+  <ul class="nav-links">
+    <li><a href="#featured">Destinasi</a></li>
+    <li><a href="#categories">Kategori</a></li>
+    <li><a href="#packages">Paket</a></li>
+    <li><a href="#experiences">Tentang</a></li>
+    <li><a href="#reviews">Ulasan</a></li>
+  </ul>
+  <a href="#packages" class="nav-book">Pesan Sekarang</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-slides">
+    <div class="hero-slide active"></div>
+    <div class="hero-slide"></div>
+    <div class="hero-slide"></div>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-texture"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-line"></span>Luxury Travel & Experiences</div>
+    <h1 class="hero-title">
+      Jelajahi<br>Dunia Dengan<br><em>Gaya</em>
+    </h1>
+    <div class="hero-bottom">
+      <p class="hero-desc">
+        Setiap perjalanan adalah sebuah cerita. Biarkan kami menuliskan kisah tak terlupakan untuk Anda — dari surga tersembunyi hingga kota-kota paling menawan di dunia.
+      </p>
+      <div class="hero-search">
+        <input type="text" placeholder="Cari destinasi impian Anda...">
+        <button>Cari</button>
+      </div>
+    </div>
+  </div>
+  <div class="hero-counter">
+    <div class="hero-dot active"></div>
+    <div class="hero-dot"></div>
+    <div class="hero-dot"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    <span class="marquee-item">Bali, Indonesia</span>
+    <span class="marquee-item">Santorini, Greece</span>
+    <span class="marquee-item">Kyoto, Japan</span>
+    <span class="marquee-item">Maldives</span>
+    <span class="marquee-item">Patagonia, Chile</span>
+    <span class="marquee-item">Amalfi Coast, Italy</span>
+    <span class="marquee-item">Raja Ampat, Papua</span>
+    <span class="marquee-item">Swiss Alps</span>
+    <span class="marquee-item">Morocco</span>
+    <span class="marquee-item">New Zealand</span>
+    <span class="marquee-item">Bali, Indonesia</span>
+    <span class="marquee-item">Santorini, Greece</span>
+    <span class="marquee-item">Kyoto, Japan</span>
+    <span class="marquee-item">Maldives</span>
+    <span class="marquee-item">Patagonia, Chile</span>
+    <span class="marquee-item">Amalfi Coast, Italy</span>
+    <span class="marquee-item">Raja Ampat, Papua</span>
+    <span class="marquee-item">Swiss Alps</span>
+    <span class="marquee-item">Morocco</span>
+    <span class="marquee-item">New Zealand</span>
+  </div>
+</div>
+
+<!-- FEATURED DESTINATIONS -->
+<section id="featured">
+  <div class="feat-header reveal">
+    <div>
+      <div class="section-tag">Destinasi Pilihan</div>
+      <h2 class="section-title">Tempat-Tempat Yang <em>Memukau</em></h2>
+    </div>
+    <a href="#" class="view-all">Lihat Semua Destinasi</a>
+  </div>
+  <div class="dest-grid">
+    <div class="dest-card reveal">
+      <div class="dest-inner">
+        <img class="dest-img" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=900&q=85" alt="Bali">
+        <div class="dest-overlay"></div>
+        <div class="dest-tag">Trending</div>
+        <div class="dest-heart">♡</div>
+        <div class="dest-info">
+          <div class="dest-country">Indonesia</div>
+          <div class="dest-name">Ubud & Pantai Bali</div>
+          <div class="dest-meta">
+            <div class="dest-duration">7–14 hari · All-inclusive</div>
+            <div class="dest-price">Rp 8,5 jt <span>/ orang</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dest-card reveal">
+      <div class="dest-inner">
+        <img class="dest-img" src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=700&q=85" alt="Santorini">
+        <div class="dest-overlay"></div>
+        <div class="dest-tag">Premium</div>
+        <div class="dest-heart">♡</div>
+        <div class="dest-info">
+          <div class="dest-country">Yunani</div>
+          <div class="dest-name">Santorini Escape</div>
+          <div class="dest-meta">
+            <div class="dest-duration">10 hari</div>
+            <div class="dest-price">Rp 24 jt <span>/ orang</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dest-card reveal">
+      <div class="dest-inner">
+        <img class="dest-img" src="https://images.unsplash.com/photo-1532236204992-f5e85c024202?w=700&q=85" alt="Maldives">
+        <div class="dest-overlay"></div>
+        <div class="dest-tag">Eksklusif</div>
+        <div class="dest-heart">♡</div>
+        <div class="dest-info">
+          <div class="dest-country">Maladewa</div>
+          <div class="dest-name">Private Island</div>
+          <div class="dest-meta">
+            <div class="dest-duration">7 hari</div>
+            <div class="dest-price">Rp 48 jt <span>/ orang</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dest-card reveal">
+      <div class="dest-inner">
+        <img class="dest-img" src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=700&q=85" alt="Kyoto">
+        <div class="dest-overlay"></div>
+        <div class="dest-tag">Budaya</div>
+        <div class="dest-heart">♡</div>
+        <div class="dest-info">
+          <div class="dest-country">Jepang</div>
+          <div class="dest-name">Kyoto & Tokyo</div>
+          <div class="dest-meta">
+            <div class="dest-duration">12 hari</div>
+            <div class="dest-price">Rp 22 jt <span>/ orang</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dest-card reveal">
+      <div class="dest-inner">
+        <img class="dest-img" src="https://images.unsplash.com/photo-1516690561799-46d8f74f9abf?w=700&q=85" alt="Raja Ampat">
+        <div class="dest-overlay"></div>
+        <div class="dest-tag">Tersembunyi</div>
+        <div class="dest-heart">♡</div>
+        <div class="dest-info">
+          <div class="dest-country">Papua, Indonesia</div>
+          <div class="dest-name">Raja Ampat</div>
+          <div class="dest-meta">
+            <div class="dest-duration">10 hari</div>
+            <div class="dest-price">Rp 18 jt <span>/ orang</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section id="categories">
+  <div class="cat-header reveal">
+    <div class="section-tag">Jenis Perjalanan</div>
+    <h2 class="section-title" style="color:var(--white);">Temukan <em>Gaya</em> Perjalanan Anda</h2>
+  </div>
+  <div class="cat-grid">
+    <a href="#" class="cat-card reveal">
+      <div class="cat-img-wrap">
+        <img class="cat-img" src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&q=80" alt="Luxury">
+        <div class="cat-img-fade"></div>
+      </div>
+      <div class="cat-body">
+        <span class="cat-icon">🏨</span>
+        <div class="cat-name">Luxury Stay</div>
+        <div class="cat-count">48 paket tersedia</div>
+      </div>
+    </a>
+    <a href="#" class="cat-card reveal">
+      <div class="cat-img-wrap">
+        <img class="cat-img" src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400&q=80" alt="Adventure">
+        <div class="cat-img-fade"></div>
+      </div>
+      <div class="cat-body">
+        <span class="cat-icon">🏔️</span>
+        <div class="cat-name">Petualangan</div>
+        <div class="cat-count">36 paket tersedia</div>
+      </div>
+    </a>
+    <a href="#" class="cat-card reveal">
+      <div class="cat-img-wrap">
+        <img class="cat-img" src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400&q=80" alt="Wellness">
+        <div class="cat-img-fade"></div>
+      </div>
+      <div class="cat-body">
+        <span class="cat-icon">🧘</span>
+        <div class="cat-name">Wellness Retreat</div>
+        <div class="cat-count">22 paket tersedia</div>
+      </div>
+    </a>
+    <a href="#" class="cat-card reveal">
+      <div class="cat-img-wrap">
+        <img class="cat-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80" alt="Culinary">
+        <div class="cat-img-fade"></div>
+      </div>
+      <div class="cat-body">
+        <span class="cat-icon">🍽️</span>
+        <div class="cat-name">Kuliner Dunia</div>
+        <div class="cat-count">18 paket tersedia</div>
+      </div>
+    </a>
+    <a href="#" class="cat-card reveal">
+      <div class="cat-img-wrap">
+        <img class="cat-img" src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&q=80" alt="Honeymoon">
+        <div class="cat-img-fade"></div>
+      </div>
+      <div class="cat-body">
+        <span class="cat-icon">💑</span>
+        <div class="cat-name">Bulan Madu</div>
+        <div class="cat-count">30 paket tersedia</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- EXPERIENCES -->
+<section id="experiences">
+  <div class="exp-layout">
+    <div class="exp-text reveal-l">
+      <div class="section-tag">Tentang Wandara</div>
+      <h2 class="section-title">Lebih dari Sekadar <em>Perjalanan</em></h2>
+      <p>Wandara didirikan dengan satu keyakinan sederhana: setiap perjalanan harus meninggalkan kesan abadi. Kami menjadi jembatan antara Anda dan dunia yang menakjubkan.</p>
+      <p>Dari pemilihan akomodasi terbaik, perjalanan privat, hingga pengalaman kuliner eksklusif — tim kurator kami memastikan setiap detail sempurna.</p>
+      <div class="exp-numbers">
+        <div class="exp-num">
+          <div class="exp-num-val">120+</div>
+          <div class="exp-num-label">Destinasi Tersedia</div>
+        </div>
+        <div class="exp-num">
+          <div class="exp-num-val">15K+</div>
+          <div class="exp-num-label">Pelancong Puas</div>
+        </div>
+        <div class="exp-num">
+          <div class="exp-num-val">12</div>
+          <div class="exp-num-label">Tahun Berpengalaman</div>
+        </div>
+        <div class="exp-num">
+          <div class="exp-num-val">4.9★</div>
+          <div class="exp-num-label">Rating Rata-rata</div>
+        </div>
+      </div>
+    </div>
+    <div class="exp-visual reveal-r">
+      <img class="exp-img-main" src="https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=800&q=85" alt="Experience">
+      <img class="exp-img-accent" src="https://images.unsplash.com/photo-1473625247510-8ceb1760943f?w=300&q=80" alt="Accent">
+      <div class="exp-card-float">
+        <div class="exp-card-float-title">Kepuasan Pelanggan</div>
+        <div class="exp-rating">
+          <span class="exp-stars">★★★★★</span>
+        </div>
+        <div class="exp-rating-num">4.9 / 5.0</div>
+        <div class="exp-rating-sub">Dari 15.000+ ulasan</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section id="packages">
+  <div class="pkg-header reveal">
+    <div class="section-tag">Paket Perjalanan</div>
+    <h2 class="section-title">Pilih <em>Petualangan</em> Anda</h2>
+  </div>
+  <div class="pkg-tabs">
+    <button class="pkg-tab active">Semua</button>
+    <button class="pkg-tab">Honeymoon</button>
+    <button class="pkg-tab">Petualangan</button>
+    <button class="pkg-tab">Keluarga</button>
+    <button class="pkg-tab">Solo Travel</button>
+  </div>
+  <div class="pkg-grid">
+    <div class="pkg-card reveal">
+      <div class="pkg-img-wrap">
+        <img class="pkg-img" src="https://images.unsplash.com/photo-1540202404-a2f29016b523?w=600&q=85" alt="Bali">
+        <div class="pkg-duration">7 Hari</div>
+      </div>
+      <div class="pkg-body">
+        <div class="pkg-dest">Bali, Indonesia</div>
+        <div class="pkg-name">Bali Sacred & Surf Experience</div>
+        <p class="pkg-desc">Nikmati pura suci Tanah Lot, selancar di Canggu, spa perawatan tradisional, dan sunset view dari Tegalalang.</p>
+        <div class="pkg-includes">
+          <span class="pkg-include-tag">Hotel Bintang 5</span>
+          <span class="pkg-include-tag">Penerbangan PP</span>
+          <span class="pkg-include-tag">Private Guide</span>
+        </div>
+        <div class="pkg-footer">
+          <div class="pkg-price">Rp 9,8 jt <span>/ orang</span></div>
+          <a href="#" class="pkg-btn">Pesan</a>
+        </div>
+      </div>
+    </div>
+    <div class="pkg-card featured reveal">
+      <div class="pkg-img-wrap">
+        <img class="pkg-img" src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&q=85" alt="Maldives">
+        <div class="pkg-duration">10 Hari</div>
+      </div>
+      <div class="pkg-body">
+        <div class="pkg-dest">Maladewa</div>
+        <div class="pkg-name">Maldives Overwater Paradise</div>
+        <p class="pkg-desc">Villa di atas air dengan akses langsung ke laut biru jernih, snorkeling privat, makan malam bawah laut, dan spa terapung eksklusif.</p>
+        <div class="pkg-includes">
+          <span class="pkg-include-tag">Overwater Villa</span>
+          <span class="pkg-include-tag">All-Inclusive</span>
+          <span class="pkg-include-tag">Speedboat</span>
+        </div>
+        <div class="pkg-footer">
+          <div class="pkg-price">Rp 48 jt <span>/ orang</span></div>
+          <a href="#" class="pkg-btn">Pesan</a>
+        </div>
+      </div>
+    </div>
+    <div class="pkg-card reveal">
+      <div class="pkg-img-wrap">
+        <img class="pkg-img" src="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=600&q=85" alt="Iceland">
+        <div class="pkg-duration">12 Hari</div>
+      </div>
+      <div class="pkg-body">
+        <div class="pkg-dest">Islandia & Aurora</div>
+        <div class="pkg-name">Northern Lights Expedition</div>
+        <p class="pkg-desc">Berburu aurora borealis, berendam di Blue Lagoon, jelajahi gletser kuno, dan menginap di glamping kaca di bawah bintang.</p>
+        <div class="pkg-includes">
+          <span class="pkg-include-tag">Glass Cabin</span>
+          <span class="pkg-include-tag">Penerbangan PP</span>
+          <span class="pkg-include-tag">4WD Tour</span>
+        </div>
+        <div class="pkg-footer">
+          <div class="pkg-price">Rp 36 jt <span>/ orang</span></div>
+          <a href="#" class="pkg-btn">Pesan</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="rev-header">
+    <div class="reveal-l">
+      <div class="section-tag">Ulasan Pelancong</div>
+      <h2 class="section-title" style="color:var(--white);">Yang Mereka <em>Rasakan</em></h2>
+      <p>Ribuan pelancong telah mempercayakan momen berharga mereka kepada kami — dan mereka kembali lagi.</p>
+      <div class="rev-score">
+        <div class="rev-score-num">4.9</div>
+        <div class="rev-score-detail">
+          <div class="rev-stars">★★★★★</div>
+          <div class="rev-score-sub">dari 15.240 ulasan terverifikasi</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="rev-grid">
+    <div class="rev-card reveal">
+      <div class="rev-quote">"</div>
+      <p class="rev-text">Perjalanan honeymoon ke Maladewa bersama Wandara adalah yang paling sempurna. Setiap detail diperhatikan, dari transfer bandara hingga reservasi makan malam romantis. Kami sangat terkesan.</p>
+      <div class="rev-author">
+        <img class="rev-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt="Anisa">
+        <div>
+          <div class="rev-name">Anisa & Reza Pratama</div>
+          <div class="rev-trip">Maldives Overwater Paradise</div>
+        </div>
+      </div>
+    </div>
+    <div class="rev-card reveal">
+      <div class="rev-quote">"</div>
+      <p class="rev-text">Tim Wandara benar-benar mengerti apa yang kami butuhkan. Itinerary ke Jepang terasa personal, bukan seperti tur biasa. Kami menemukan sudut-sudut tersembunyi Kyoto yang tidak ada di guidebook manapun.</p>
+      <div class="rev-author">
+        <img class="rev-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt="Dimas">
+        <div>
+          <div class="rev-name">Dimas Firmansyah</div>
+          <div class="rev-trip">Kyoto & Tokyo Cultural Journey</div>
+        </div>
+      </div>
+    </div>
+    <div class="rev-card reveal">
+      <div class="rev-quote">"</div>
+      <p class="rev-text">Aurora borealis di Islandia bersama keluarga adalah mimpi yang jadi kenyataan. Wandara mengurus segalanya dengan sempurna. Anak-anak kami masih bercerita tentang perjalanan itu sampai sekarang.</p>
+      <div class="rev-author">
+        <img class="rev-avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80" alt="Linda">
+        <div>
+          <div class="rev-name">Linda Kusuma</div>
+          <div class="rev-trip">Northern Lights Expedition</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why">
+  <div style="text-align:center;" class="reveal">
+    <div class="section-tag" style="justify-content:center;">Keunggulan Kami</div>
+    <h2 class="section-title">Mengapa Memilih <em>Wandara</em></h2>
+  </div>
+  <div class="why-grid">
+    <div class="why-card reveal">
+      <span class="why-icon">✈️</span>
+      <div class="why-title">Kurasi Personal</div>
+      <p class="why-desc">Setiap itinerary dibuat khusus sesuai kepribadian, anggaran, dan impian Anda — bukan paket generik.</p>
+    </div>
+    <div class="why-card reveal">
+      <span class="why-icon">🛡️</span>
+      <div class="why-title">Perjalanan Aman</div>
+      <p class="why-desc">Asuransi perjalanan komprehensif, tim darurat 24/7, dan mitra terpercaya di seluruh destinasi.</p>
+    </div>
+    <div class="why-card reveal">
+      <span class="why-icon">💎</span>
+      <div class="why-title">Nilai Terbaik</div>
+      <p class="why-desc">Akses ke rate khusus hotel-hotel mewah dan maskapai premium yang tidak tersedia di platform biasa.</p>
+    </div>
+    <div class="why-card reveal">
+      <span class="why-icon">🌿</span>
+      <div class="why-title">Perjalanan Lestari</div>
+      <p class="why-desc">Berkomitmen pada pariwisata berkelanjutan yang menghormati budaya lokal dan menjaga lingkungan.</p>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="newsletter">
+  <div class="nl-inner reveal">
+    <div class="section-tag">Tetap Terinformasi</div>
+    <h2 class="nl-title">Inspirasi <em>Perjalanan</em><br>Setiap Minggu</h2>
+    <p class="nl-sub">Dapatkan rekomendasi destinasi terbaru, penawaran eksklusif, dan panduan perjalanan dari kurator kami langsung ke inbox Anda.</p>
+    <div class="nl-form">
+      <input type="email" placeholder="Masukkan alamat email Anda">
+      <button>Berlangganan</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <span class="footer-logo">WANDARA™</span>
+      <p class="footer-tagline">Kami percaya perjalanan adalah investasi terbaik yang bisa Anda buat untuk diri sendiri — setiap destinasi membentuk siapa Anda.</p>
+      <div class="footer-social">
+        <a href="#" class="soc">in</a>
+        <a href="#" class="soc">ig</a>
+        <a href="#" class="soc">yt</a>
+        <a href="#" class="soc">tt</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Destinasi</h4>
+      <ul>
+        <li><a href="#">Asia Tenggara</a></li>
+        <li><a href="#">Eropa</a></li>
+        <li><a href="#">Timur Tengah</a></li>
+        <li><a href="#">Amerika</a></li>
+        <li><a href="#">Afrika</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Layanan</h4>
+      <ul>
+        <li><a href="#">Paket Liburan</a></li>
+        <li><a href="#">Honeymoon</a></li>
+        <li><a href="#">Corporate Travel</a></li>
+        <li><a href="#">Private Charter</a></li>
+        <li><a href="#">Visa Assistance</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Kontak</h4>
+      <ul>
+        <li><a href="#">Jl. Sudirman Kav. 52–53<br>Jakarta Pusat 10250</a></li>
+        <li><a href="tel:+622150505050">+62 21 5050-5050</a></li>
+        <li><a href="mailto:hello@wandara.id">hello@wandara.id</a></li>
+        <li><a href="#">Setiap hari: 08.00 – 21.00</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 Wandara Travel. Seluruh hak dilindungi.</p>
+    <div class="footer-legal">
+      <a href="#">Privasi</a>
+      <a href="#">Syarat</a>
+      <a href="#">Cookie</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Cursor
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-r');
+document.addEventListener('mousemove',e=>{
+  cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+  setTimeout(()=>{ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';},70);
+});
+
+// Navbar
+const nav=document.getElementById('navbar');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('solid',window.scrollY>60);
+});
+
+// Hero slideshow
+let slide=0;
+const slides=document.querySelectorAll('.hero-slide');
+const dots=document.querySelectorAll('.hero-dot');
+function nextSlide(){
+  slides[slide].classList.remove('active');
+  dots[slide].classList.remove('active');
+  slide=(slide+1)%slides.length;
+  slides[slide].classList.add('active');
+  dots[slide].classList.add('active');
+}
+setInterval(nextSlide,5000);
+
+// Reveal
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('visible'),i*90);
+    }
+  });
+},{threshold:0.1});
+document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el=>obs.observe(el));
+
+// Filter tabs
+document.querySelectorAll('.pkg-tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.pkg-tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+  });
+});
+
+// Heart toggle
+document.querySelectorAll('.dest-heart').forEach(h=>{
+  h.addEventListener('click',()=>{
+    h.textContent=h.textContent==='♡'?'♥':'♡';
+    h.style.color=h.textContent==='♥'?'#e05c5c':'';
+  });
+});
+</script>
+</body>
+</html>
